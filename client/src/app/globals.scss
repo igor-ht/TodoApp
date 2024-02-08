@@ -7,12 +7,12 @@ a {
   text-decoration: none;
 }
 
-// :root {
+:root {
+  overflow: hidden;
+}
 
-// }
-
-:root,
 body {
   width: 100dvw;
   height: 100svh;
+  overflow: hidden;
 }

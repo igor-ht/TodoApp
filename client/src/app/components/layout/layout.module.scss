@@ -1,0 +1,121 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 2rem;
+
+  div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.5rem;
+
+    span {
+      font-family: system-ui;
+      font-size: 1rem;
+      color: black;
+      text-align: center;
+      text-wrap: balance;
+    }
+  }
+
+  nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+    // margin: 1rem 3.5rem 1rem 0.5rem;
+
+    a {
+      min-width: 50px;
+      padding: 0.5rem;
+      color: white;
+      font-family: system-ui;
+      font-size: 1.1rem;
+      font-weight: 500;
+      text-align: center;
+      text-wrap: nowrap;
+      border: 1px solid rgb(171, 54, 171);
+      border-radius: 2rem;
+      background-color: rgb(171, 54, 171);
+      box-shadow: 0px 0px 2px 0px rgb(203, 166, 203);
+      transition: 0.3s;
+
+      &:hover {
+        background-color: rgb(114, 45, 114);
+        box-shadow: 0px 0px 5px 1px rgb(203, 166, 203);
+      }
+      &:active {
+        opacity: 0.8;
+        background-color: rgb(80, 31, 80);
+        box-shadow: 0px 0px 10px 2px rgb(203, 166, 203);
+      }
+      &:last-child {
+        background-color: rgb(54, 171, 171);
+        border: 1px solid rgb(54, 171, 171);
+        &:hover {
+          background-color: rgb(45, 114, 114);
+          box-shadow: 0px 0px 5px 1px rgb(203, 166, 203);
+        }
+        &:active {
+          background-color: rgb(31, 80, 80);
+          box-shadow: 0px 0px 10px 2px rgb(203, 166, 203);
+        }
+      }
+    }
+
+    .hasUser {
+      min-width: 75px;
+      background-color: salmon;
+      border: 1px solid salmon;
+
+      &:hover {
+        background-color: rgb(255, 140, 140);
+        box-shadow: 0px 0px 5px 1px rgb(203, 166, 203);
+      }
+      &:active {
+        opacity: 0.8;
+        background-color: rgb(255, 99, 99);
+        box-shadow: 0px 0px 10px 2px rgb(203, 166, 203);
+      }
+
+      &:last-child {
+        background-color: rgb(171, 54, 54);
+        border: 1px solid rgb(171, 54, 54);
+        &:hover {
+          background-color: rgb(114, 45, 45);
+          box-shadow: 0px 0px 5px 1px rgb(203, 166, 203);
+        }
+        &:active {
+          background-color: rgb(80, 31, 31);
+          box-shadow: 0px 0px 10px 2px rgb(203, 166, 203);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 540px) {
+    margin: 0.5rem;
+    div {
+      align-items: center;
+
+      span {
+        max-width: 150px;
+      }
+    }
+    nav {
+      gap: 1rem;
+    }
+  }
+}
+
+.main {
+  width: 100dvw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
