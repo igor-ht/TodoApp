@@ -4,6 +4,7 @@ import { queryClient } from '@/app/components/providers/ReactQueryClientProvider
 import Loading from '@/app/loading';
 import { ENDPOINT } from '@/config';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { useQuery, useMutation } from 'react-query';
 
 export default function Todos() {
@@ -14,7 +15,7 @@ export default function Todos() {
 		enabled: !!data && status === 'authenticated',
 		cacheTime: Infinity,
 		staleTime: Infinity,
-		retry: 3,
+		retry: 1,
 		queryFn: async () => {
 			const response = await fetch(`${ENDPOINT}/user/${data?.user.id}/todo/allTodos`);
 			if (!response.ok) {
@@ -89,6 +90,15 @@ export default function Todos() {
 	});
 
 	if (allTodosStatus === 'loading') return <Loading />;
+
+	if (allTodosStatus === 'error')
+		return (
+			<div
+				className="error"
+				style={{ justifyContent: 'flex-start' }}>
+				Something went wrong!
+			</div>
+		);
 
 	return (
 		<div>

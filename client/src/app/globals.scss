@@ -18,6 +18,37 @@ body {
   overflow: hidden;
 }
 
+.error,
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  font-size: 1.2rem;
+  font-weight: 500;
+  font-family: system-ui;
+
+  button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff3d00;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #ff3d00;
+      transform: scale(1.05);
+    }
+  }
+}
+
 .loader {
   width: 48px;
   height: 48px;
