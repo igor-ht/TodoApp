@@ -1,0 +1,30 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+
+  div {
+    min-width: 350px;
+    max-width: 95%;
+    padding: 1rem;
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    font-family: system-ui;
+    border: 1px solid rgb(198, 198, 198);
+    background-color: rgb(198, 198, 198);
+    border-radius: 10px;
+
+    span {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      font-size: 1.8rem;
+    }
+  }
+}
