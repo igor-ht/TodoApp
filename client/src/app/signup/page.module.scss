@@ -7,18 +7,34 @@
     justify-content: center;
     gap: 0.5rem;
 
-    span {
+    section {
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: 1fr 1fr;
       gap: 0.5rem;
       align-items: center;
       justify-content: space-between;
-      label {
-        font-family: system-ui;
-        font-size: 1.3rem;
-        text-align: left;
+
+      span {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        label {
+          font-family: system-ui;
+          font-size: 1.3rem;
+          text-align: left;
+        }
+
+        p {
+          font-family: system-ui;
+          font-size: 0.8rem;
+          color: red;
+          text-align: center;
+        }
       }
+
       input {
         width: 350px;
         min-height: 1.5rem;
@@ -80,7 +96,7 @@
   @media (max-width: 450px) {
     form {
       margin-top: 3rem;
-      span {
+      section {
         input {
           width: 250px;
         }

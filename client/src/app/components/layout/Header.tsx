@@ -3,7 +3,7 @@
 import styles from './layout.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function Header() {
 	const { status, data } = useSession();
@@ -16,7 +16,11 @@ export default function Header() {
 					width={70}
 					height={70}
 				/>
-				{data?.user?.name && <span>Hey there, {data.user.name}!</span>}
+				{data?.user?.username && (
+					<span>
+						Hey there, <b>{data.user?.username}</b>!
+					</span>
+				)}
 			</div>
 			<nav>
 				{status !== 'authenticated' ? (
@@ -26,6 +30,11 @@ export default function Header() {
 					</>
 				) : (
 					<>
+						<button
+							type="button"
+							onClick={() => signOut()}>
+							Sign Out
+						</button>
 						<Link
 							className={styles.hasUser}
 							href="/todos">

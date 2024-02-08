@@ -6,17 +6,32 @@
     gap: 0.5rem;
     margin-top: 3rem;
 
-    span {
+    section {
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: 1fr 1fr;
       gap: 0.5rem;
       align-items: center;
       justify-content: space-between;
-      label {
-        font-family: system-ui;
-        font-size: 1.3rem;
-        text-align: left;
+
+      span {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        label {
+          font-family: system-ui;
+          font-size: 1.3rem;
+          text-align: left;
+        }
+
+        p {
+          font-family: system-ui;
+          font-size: 0.75rem;
+          color: red;
+          text-align: center;
+        }
       }
       input {
         width: 350px;
@@ -77,7 +92,7 @@
   }
   @media (max-width: 450px) {
     form {
-      span {
+      section {
         input {
           width: 250px;
         }

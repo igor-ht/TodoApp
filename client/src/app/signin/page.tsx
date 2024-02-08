@@ -1,7 +1,10 @@
 'use client';
 
-import { useForm, SubmitHandler } from 'react-hook-form';
 import styles from './page.module.scss';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { signIn } from 'next-auth/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { schemaSignin } from '@/utils/validation';
 
 type Inputs = {
 	email: string;
@@ -13,32 +16,37 @@ export default function Page() {
 		register,
 		handleSubmit,
 		watch,
-		formState: { errors },
-	} = useForm<Inputs>();
+		formState: { errors, isSubmitting, dirtyFields },
+	} = useForm<Inputs>({ defaultValues: { email: '', password: '' }, resolver: yupResolver(schemaSignin) });
 
-	const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+	const onSubmit: SubmitHandler<Inputs> = (data) => signIn('credentials', data);
 
 	return (
 		<div className={styles.signin}>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<span>
-					<label htmlFor="email">Email:</label>
+				<section>
+					<span>
+						<label htmlFor="email">Email:</label>
+					</span>
+
 					<input
 						{...register('email', { required: true })}
 						type="email"
 						placeholder="email@example.com"
 					/>
-				</span>
-				<span>
-					<label htmlFor="password">Password:</label>
+				</section>
+				<section>
+					<span>
+						<label htmlFor="password">Password:</label>
+					</span>
 					<input
 						{...register('password', { required: true })}
 						type="password"
 						placeholder="Password"
 					/>
-				</span>
+				</section>
 				<button
-					// disabled
+					disabled={isSubmitting || !dirtyFields.email || !dirtyFields.password}
 					type="submit">
 					Sign in
 				</button>

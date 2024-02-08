@@ -1,3 +1,4 @@
+import { ENDPOINT } from '@/config';
 import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -6,14 +7,22 @@ export const NextAuthOptions: AuthOptions = {
 		CredentialsProvider({
 			name: 'Sign in',
 			credentials: {
-				id: { label: 'ID', type: 'text' },
-				username: { label: 'Username', type: 'text' },
 				email: { label: 'Email', type: 'email' },
+				password: { label: 'Password', type: 'password' },
 			},
 			async authorize(credentials) {
-				if (!credentials?.email || !credentials?.id || !credentials?.username) return null;
+				if (!credentials?.email || !credentials?.password) return null;
 
-				return { ...credentials };
+				const response = await fetch(`${ENDPOINT}/user/signin`, {
+					body: JSON.stringify(credentials),
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				});
+
+				if (!response.ok) return null;
+
+				const user = await response.json();
+				return user;
 			},
 		}),
 	],
@@ -29,7 +38,8 @@ export const NextAuthOptions: AuthOptions = {
 					id: token.id,
 					username: token.username,
 					email: token.email,
-					role: token.role,
+					accessToken: token.accessToken,
+					refreshtoken: token.refreshToken,
 				},
 			};
 		},
