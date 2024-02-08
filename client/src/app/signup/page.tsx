@@ -37,7 +37,7 @@ export default function Page() {
 
 		if (!response.ok) return setError('username', { message: 'Something went wrong' });
 
-		return await signIn('credentials', { email: data.email, password: data.password });
+		return await signIn('credentials', { email: data.email, password: data.password, redirect: false });
 	};
 
 	return (
@@ -51,7 +51,9 @@ export default function Page() {
 					<input
 						{...register('username', { required: true })}
 						type="text"
+						id="username"
 						placeholder="Username"
+						autoComplete="username"
 					/>
 				</section>
 				<section>
@@ -62,7 +64,9 @@ export default function Page() {
 					<input
 						{...register('email', { required: true })}
 						type="email"
+						id="email"
 						placeholder="email@example.com"
+						autoComplete="email"
 					/>
 				</section>
 				<section>
@@ -73,6 +77,7 @@ export default function Page() {
 					<input
 						{...register('password', { required: true })}
 						type="password"
+						id="password"
 						placeholder="Password"
 					/>
 				</section>
@@ -84,6 +89,7 @@ export default function Page() {
 					<input
 						{...register('confirmPassword', { required: true })}
 						type="password"
+						id="confirmPassword"
 						placeholder="Confirm Password"
 					/>
 				</section>

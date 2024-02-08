@@ -30,7 +30,6 @@ export const handleGetUserById = async (req: Request, res: Response) => {
 export const handleUserSignIn = async (req: Request, res: Response) => {
 	try {
 		const { email, password } = req.body;
-
 		const user = await prisma.user.findFirst({
 			where: {
 				email,
@@ -44,8 +43,7 @@ export const handleUserSignIn = async (req: Request, res: Response) => {
 		});
 		if (!user) return res.status(404).json({ message: 'One or more fields is not valid.' });
 
-		const hashedPassword = await handleHashing(password);
-		const compare = await comparePassword(password, hashedPassword);
+		const compare = await comparePassword(password, user.password);
 		if (!compare) return res.status(404).json({ message: 'One or more fields is not valid.' });
 
 		const accessToken = await generateAccessToken({ id: user.id, username: user.username, email: user.email }, ACCESS_TOKEN_KEY);

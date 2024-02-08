@@ -11,6 +11,7 @@ export const NextAuthOptions: AuthOptions = {
 				password: { label: 'Password', type: 'password' },
 			},
 			async authorize(credentials) {
+				console.log(credentials);
 				if (!credentials?.email || !credentials?.password) return null;
 
 				const response = await fetch(`${ENDPOINT}/user/signin`, {
@@ -22,6 +23,7 @@ export const NextAuthOptions: AuthOptions = {
 				if (!response.ok) return null;
 
 				const user = await response.json();
+				console.log(user);
 				return user;
 			},
 		}),
