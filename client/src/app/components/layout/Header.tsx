@@ -15,6 +15,8 @@ export default function Header() {
 					alt="Logo"
 					width={70}
 					height={70}
+					priority
+					quality={50}
 				/>
 				{data?.user?.username && (
 					<span>
