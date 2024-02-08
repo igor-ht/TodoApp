@@ -1,16 +1,30 @@
 'use client';
 
+import { useForm, SubmitHandler } from 'react-hook-form';
 import styles from './page.module.scss';
 
+type Inputs = {
+	email: string;
+	password: string;
+};
+
 export default function Page() {
+	const {
+		register,
+		handleSubmit,
+		watch,
+		formState: { errors },
+	} = useForm<Inputs>();
+
+	const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
 	return (
 		<div className={styles.signin}>
-			<form action="">
+			<form onSubmit={handleSubmit(onSubmit)}>
 				<span>
 					<label htmlFor="email">Email:</label>
 					<input
-						id="email"
-						name="email"
+						{...register('email', { required: true })}
 						type="email"
 						placeholder="email@example.com"
 					/>
@@ -18,8 +32,7 @@ export default function Page() {
 				<span>
 					<label htmlFor="password">Password:</label>
 					<input
-						id="password"
-						name="password"
+						{...register('password', { required: true })}
 						type="password"
 						placeholder="Password"
 					/>
