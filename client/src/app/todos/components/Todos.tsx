@@ -1,13 +1,13 @@
 'use client';
 
-import { queryClient } from '@/app/components/providers/ReactQueryClientProvider';
 import Loading from '@/app/loading';
-import { ENDPOINT } from '@/config';
+import useAxiosAuth from '@/utils/useAxiosAuth';
+import { queryClient } from '@/app/components/providers/ReactQueryClientProvider';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import { useQuery, useMutation } from 'react-query';
 
 export default function Todos() {
+	const axiosAuth = useAxiosAuth();
 	const { data, status } = useSession();
 
 	const { data: allTodos, status: allTodosStatus } = useQuery({
@@ -17,11 +17,9 @@ export default function Todos() {
 		staleTime: Infinity,
 		retry: 1,
 		queryFn: async () => {
-			const response = await fetch(`${ENDPOINT}/user/${data?.user.id}/todo/allTodos`);
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			return response.json();
+			const response = await axiosAuth.get(`/user/${data?.user.id}/todo/allTodos`);
+			if (!response.data) throw new Error('Network response was not ok');
+			return await response.data;
 		},
 	});
 
@@ -29,17 +27,9 @@ export default function Todos() {
 		mutationKey: ['updateTodo'],
 		retry: 3,
 		mutationFn: async (updatedTodo: { todoId: string; title: string; completed: boolean }) => {
-			const response = await fetch(`${ENDPOINT}/user/${data?.user.id}/todo/updateTodo`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(updatedTodo),
-			});
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			return response.json();
+			const response = await axiosAuth.put(`/user/${data?.user.id}/todo/updateTodo`, updatedTodo);
+			if (!response.data) throw new Error('Network response was not ok');
+			return await response.data;
 		},
 		onMutate: (updatedTodo: { todoId: string; title: string; completed: boolean }) => {
 			queryClient.cancelQueries('todos');
@@ -63,17 +53,9 @@ export default function Todos() {
 		mutationKey: ['deleteTodo'],
 		retry: 3,
 		mutationFn: async (deletedTodo: string) => {
-			const response = await fetch(`${ENDPOINT}/user/${data?.user.id}/todo/deleteTodo`, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ todoId: deletedTodo }),
-			});
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			return response.json();
+			const response = await axiosAuth.delete(`/user/${data?.user.id}/todo/deleteTodo`, { data: { todoId: deletedTodo } });
+			if (!response.data) throw new Error('Network response was not ok');
+			return await response.data;
 		},
 		onMutate: (deletedTodo: string) => {
 			queryClient.cancelQueries('todos');
@@ -103,7 +85,7 @@ export default function Todos() {
 	return (
 		<div>
 			<ul>
-				{allTodos?.reverse().map((todo: { id: string; title: string; completed: boolean }) => (
+				{allTodos?.map((todo: { id: string; title: string; completed: boolean }) => (
 					<li key={todo.id || Date.now()}>
 						<span>
 							<input

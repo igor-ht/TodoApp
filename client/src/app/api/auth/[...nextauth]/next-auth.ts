@@ -1,4 +1,5 @@
 import { ENDPOINT } from '@/config';
+import axios from 'axios';
 import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -11,19 +12,12 @@ export const NextAuthOptions: AuthOptions = {
 				password: { label: 'Password', type: 'password' },
 			},
 			async authorize(credentials) {
-				console.log(credentials);
 				if (!credentials?.email || !credentials?.password) return null;
 
-				const response = await fetch(`${ENDPOINT}/user/signin`, {
-					body: JSON.stringify(credentials),
-					headers: { 'Content-Type': 'application/json' },
-					method: 'POST',
-				});
+				const response = await axios.post(`${ENDPOINT}/user/signin`, credentials);
+				if (!response.data || response.status !== 200) return null;
 
-				if (!response.ok) return null;
-
-				const user = await response.json();
-				console.log(user);
+				const user = await response.data;
 				return user;
 			},
 		}),

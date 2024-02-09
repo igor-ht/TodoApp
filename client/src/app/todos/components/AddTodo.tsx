@@ -1,12 +1,13 @@
 'use client';
 
+import useAxiosAuth from '@/utils/useAxiosAuth';
 import { queryClient } from '@/app/components/providers/ReactQueryClientProvider';
-import { ENDPOINT } from '@/config';
 import { useSession } from 'next-auth/react';
 import { FormEvent, useState } from 'react';
 import { useMutation } from 'react-query';
 
 export default function AddTodo() {
+	const axiosAuth = useAxiosAuth();
 	const { data } = useSession();
 	const [todo, setTodo] = useState('');
 
@@ -14,15 +15,9 @@ export default function AddTodo() {
 		mutationKey: ['addTodo'],
 		retry: 3,
 		mutationFn: async (newTodo: { title: string; completed: boolean }) => {
-			const response = await fetch(`${ENDPOINT}/user/${data?.user.id}/todo/createTodo`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(newTodo),
-			});
-			if (!response.ok) throw new Error('Create todo failed');
-			return response.json();
+			const response = await axiosAuth.post(`/user/${data?.user.id}/todo/createTodo`, newTodo);
+			if (!response.data) throw new Error('Create todo failed');
+			return await response.data;
 		},
 		onMutate: (newTodo: { title: string; completed: boolean }) => {
 			queryClient.cancelQueries('todos');

@@ -6,11 +6,6 @@ export default async function middleware(req: NextRequest) {
 	const isAuthenticated = !!token;
 	const currentPath = req.nextUrl.pathname;
 
-	if (currentPath === '/') {
-		if (isAuthenticated) return NextResponse.redirect(new URL('/todos', req.url));
-		return NextResponse.redirect(new URL('/signin', req.url));
-	}
-
 	if (currentPath.startsWith('/signin') || currentPath.startsWith('/signup')) {
 		if (isAuthenticated) return NextResponse.redirect(new URL('/todos', req.url));
 	}
@@ -22,4 +17,4 @@ export default async function middleware(req: NextRequest) {
 	return NextResponse.next();
 }
 
-export const config = { matcher: ['/', '/dashboard', '/todos', '/signin', '/signup'] };
+export const config = { matcher: ['/dashboard', '/todos', '/signin', '/signup'] };

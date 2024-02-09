@@ -1,1 +1,1 @@
-export const ENDPOINT = process.env.ENDPOINT || 'http://localhost:5000';
+export const ENDPOINT = process.env.NEXT_PUBLIC_ENDPOINT || 'http://localhost:5000';
