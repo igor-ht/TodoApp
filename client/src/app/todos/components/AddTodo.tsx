@@ -19,17 +19,17 @@ export default function AddTodo() {
 			if (!response.data) throw new Error('Create todo failed');
 			return await response.data;
 		},
-		onMutate: (newTodo: { title: string; completed: boolean }) => {
-			queryClient.cancelQueries('todos');
-			const previousTodos = queryClient.getQueryData('todos');
-			queryClient.setQueryData('todos', (old: any) => [...old, newTodo]);
+		onMutate: async (newTodo) => {
+			await queryClient.cancelQueries(['todos']);
+			const previousTodos = queryClient.getQueryData(['todos']);
+			queryClient.setQueryData(['todos'], (old: any) => [...old, newTodo]);
 			return { previousTodos };
 		},
 		onError: (err: any, newTodo: any, context: any) => {
-			queryClient.setQueryData('todos', context?.previousTodos);
+			queryClient.setQueryData(['todos'], context.previousTodo);
 		},
 		onSettled: () => {
-			queryClient.invalidateQueries('todos');
+			queryClient.invalidateQueries(['todos']);
 		},
 	});
 
@@ -45,6 +45,7 @@ export default function AddTodo() {
 			<form onSubmit={addTodo}>
 				<input
 					type="text"
+					id="todo"
 					value={todo}
 					onChange={(e) => setTodo(e.target.value)}
 				/>

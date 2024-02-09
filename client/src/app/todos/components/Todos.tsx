@@ -31,21 +31,22 @@ export default function Todos() {
 			if (!response.data) throw new Error('Network response was not ok');
 			return await response.data;
 		},
-		onMutate: (updatedTodo: { todoId: string; title: string; completed: boolean }) => {
-			queryClient.cancelQueries('todos');
-			const previousTodos = queryClient.getQueryData('todos');
-			queryClient.setQueryData('todos', (old: any) => {
-				const index = old.findIndex((todo: any) => todo === updatedTodo);
-				old[index] = updatedTodo;
-				return old;
-			});
+		onMutate: async (updatedTodo: { todoId: string; title: string; completed: boolean }) => {
+			queryClient.cancelQueries(['todos']);
+			const previousTodos = queryClient.getQueryData(['todos']);
+			queryClient.setQueryData(['todos'], (old: any) =>
+				old?.map((todo: any) => ({
+					...todo,
+					completed: todo.id === updatedTodo.todoId ? updatedTodo.completed : todo.completed,
+				}))
+			);
 			return { previousTodos };
 		},
 		onError: (err, updatedTodo, context) => {
-			queryClient.setQueryData('todos', context?.previousTodos);
+			queryClient.setQueryData(['todos'], context?.previousTodos);
 		},
 		onSettled: () => {
-			queryClient.invalidateQueries('todos');
+			queryClient.invalidateQueries(['todos']);
 		},
 	});
 
@@ -57,17 +58,18 @@ export default function Todos() {
 			if (!response.data) throw new Error('Network response was not ok');
 			return await response.data;
 		},
-		onMutate: (deletedTodo: string) => {
-			queryClient.cancelQueries('todos');
+		onMutate: async (deletedTodo: string) => {
+			queryClient.cancelQueries(['todos']);
 			const previousTodos = queryClient.getQueryData('todos');
-			queryClient.setQueryData('todos', (old: any) => old?.filter((todo: string) => todo !== deletedTodo));
+			queryClient.setQueryData('todos', (old: any) => old?.filter((todo: any) => todo.id !== deletedTodo));
 			return { previousTodos };
 		},
 		onError: (err: any, deletedTodo: any, context: any) => {
-			queryClient.setQueryData('todos', context?.previousTodos);
+			queryClient.setQueryData(['todos'], context?.previousTodos);
 		},
 		onSettled: () => {
-			queryClient.invalidateQueries('todos');
+			queryClient.invalidateQueries(['todos']);
+			queryClient.setQueryData(['todos'], (old: any) => [...old]);
 		},
 	});
 
@@ -91,8 +93,9 @@ export default function Todos() {
 							<input
 								type="checkbox"
 								name="completed"
-								id="completed"
+								id={todo.id}
 								checked={todo.completed}
+								disabled={updatedTodoStatus === 'loading' || deleteTodoStatus === 'loading'}
 								onChange={() => updateTodo({ todoId: todo.id, title: todo.title, completed: !todo.completed })}
 							/>
 							<p>{todo.title}</p>

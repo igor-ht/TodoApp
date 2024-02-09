@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 95%;
-  width: 90%;
+  width: 100%;
+  height: 100%;
 
   section {
-    width: 100%;
+    width: 90%;
     margin-bottom: 20px;
 
     form {
@@ -47,19 +47,32 @@
   }
 
   div {
+    height: 70%;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      padding-left: -10px;
+      width: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #8d8d8d;
+      border-radius: 5px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: #f1f1f1;
+    }
 
     ul {
-      width: 100%;
+      width: 90%;
       display: flex;
       flex-direction: column;
       align-items: center;
       list-style: none;
-      padding: 0;
+      padding: 0.5rem;
       margin: 0;
 
       li {
@@ -88,6 +101,9 @@
             cursor: pointer;
             &:checked {
               background-color: #007bff;
+            }
+            &:disabled {
+              cursor: not-allowed;
             }
           }
 
@@ -132,8 +148,5 @@
         }
       }
     }
-  }
-
-  @media (max-width: 450px) {
   }
 }
