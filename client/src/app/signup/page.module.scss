@@ -94,11 +94,23 @@
   }
 
   @media (max-width: 450px) {
+    width: 95%;
     form {
+      width: 100%;
+      align-items: center;
       margin-top: 3rem;
       section {
+        width: 90%;
+        justify-items: center;
+        span {
+          width: 100%;
+          justify-self: flex-start;
+          label {
+            font-size: 1.2rem;
+          }
+        }
         input {
-          width: 250px;
+          width: 95%;
         }
       }
     }

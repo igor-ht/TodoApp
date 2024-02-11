@@ -10,12 +10,8 @@ export const schemaSignin = yup
 export const schemaSignup = yup
 	.object({
 		email: yup.string().email().required(),
-		username: yup
-			.string()
-			.min(4, 'Username should be at least 4 characters.')
-			.max(12, 'Username should be no more than 12 characters.')
-			.required(),
-		password: yup.string().min(6, 'Password should be at least 6 characters.').required(),
+		username: yup.string().min(4, 'At least 4 characters.').max(12, 'At most 12 characters.').required(),
+		password: yup.string().min(6, 'At least 6 characters.').required(),
 		confirmPassword: yup
 			.string()
 			.oneOf([yup.ref('password')], 'Passwords must match')
