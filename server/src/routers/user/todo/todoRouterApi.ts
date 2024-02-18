@@ -14,6 +14,9 @@ export const handleGetAllTodos = async (req: Request, res: Response) => {
 				completed: true,
 				userId: true,
 			},
+			orderBy: {
+				createdAt: 'desc',
+			},
 		});
 
 		return res.status(200).json(allTodos);
@@ -31,6 +34,7 @@ export const createTodo = async (req: Request, res: Response) => {
 			data: {
 				title,
 				userId: id,
+				createdAt: Date.now().toString(),
 			},
 			select: {
 				id: true,

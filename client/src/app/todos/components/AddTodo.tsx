@@ -22,11 +22,12 @@ export default function AddTodo() {
 		onMutate: async (newTodo) => {
 			await queryClient.cancelQueries(['todos']);
 			const previousTodos = queryClient.getQueryData(['todos']);
-			queryClient.setQueryData(['todos'], (old: any) => [...old, newTodo]);
+			queryClient.setQueryData(['todos'], (old: any) => [newTodo, ...old]);
 			return { previousTodos };
 		},
 		onError: (err: any, newTodo: any, context: any) => {
 			queryClient.setQueryData(['todos'], context.previousTodo);
+			alert('We got an error adding the todo. Try again latter.');
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries(['todos']);
