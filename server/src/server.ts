@@ -1,10 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import userRouter from './routers/user/userRouter';
+import { ORIGIN } from './config';
 
 const server = express();
 
-server.use(cors({ origin: '*' }));
+server.use(cors({ origin: ORIGIN }));
 
 server.use(express.json());
 

@@ -13,12 +13,15 @@ const seed = async () => {
 					{
 						title: 'Buy groceries',
 						completed: true,
+						createdAt: Date.now().toString(),
 					},
 					{
 						title: 'Walk the dog',
+						createdAt: Date.now().toString(),
 					},
 					{
 						title: 'Wash the car',
+						createdAt: Date.now().toString(),
 					},
 				],
 			},
