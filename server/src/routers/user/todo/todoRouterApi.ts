@@ -89,3 +89,20 @@ export const deleteTodo = async (req: Request, res: Response) => {
 		return res.status(500).json({ message: error });
 	}
 };
+
+export const clearAllTodos = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+
+		const deleteAllTodos = await prisma.todo.deleteMany({
+			where: {
+				userId: id,
+			},
+		});
+
+		if (!deleteAllTodos) return res.status(400).json('We had a problem');
+		return res.status(200).json(deleteAllTodos);
+	} catch (error) {
+		return res.status(500).json(error);
+	}
+};

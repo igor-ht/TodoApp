@@ -19,9 +19,10 @@ export default function AddTodo() {
 			if (!response.data) throw new Error('Create todo failed');
 			return await response.data;
 		},
-		onMutate: async (newTodo) => {
+		onMutate: async (newTodo: any) => {
 			await queryClient.cancelQueries(['todos']);
 			const previousTodos = queryClient.getQueryData(['todos']);
+			newTodo.id = String(Date.now());
 			queryClient.setQueryData(['todos'], (old: any) => [newTodo, ...old]);
 			return { previousTodos };
 		},

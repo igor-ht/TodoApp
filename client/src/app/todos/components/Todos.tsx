@@ -38,6 +38,7 @@ export default function Todos() {
 				old?.map((todo: any) => ({
 					...todo,
 					completed: todo.id === updatedTodo.todoId ? updatedTodo.completed : todo.completed,
+					isOnChange: todo.id === updatedTodo.todoId,
 				}))
 			);
 			return { previousTodos };
@@ -50,7 +51,7 @@ export default function Todos() {
 		},
 	});
 
-	const { mutate: deleteTodo, status: deleteTodoStatus } = useMutation({
+	const { mutate: deleteTodo } = useMutation({
 		mutationKey: ['deleteTodo'],
 		retry: 3,
 		mutationFn: async (deletedTodo: string) => {
@@ -73,6 +74,26 @@ export default function Todos() {
 		},
 	});
 
+	const { mutate: clearAllTodos } = useMutation({
+		mutationKey: ['clearAllTodos'],
+		retry: 3,
+		mutationFn: async () => {
+			const res = await axiosAuth.delete(`/user/${data?.user.id}/todo/clearAllTodos`);
+			return await res.data;
+		},
+		onMutate: () => {
+			queryClient.cancelQueries(['todos']);
+			return { todos: [] };
+		},
+		onError: (context: any) => {
+			queryClient.setQueryData(['todos'], context?.previousTodos);
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries(['todos']);
+			queryClient.setQueryData(['todos'], []);
+		},
+	});
+
 	if (allTodosStatus === 'loading') return <Loading />;
 
 	if (allTodosStatus === 'error')
@@ -86,23 +107,32 @@ export default function Todos() {
 
 	return (
 		<div>
+			<section>
+				<span>{updatedTodoStatus === 'loading' && <Loading />}</span>
+				<button
+					type="button"
+					disabled={allTodos?.length === 0}
+					onClick={() => clearAllTodos()}>
+					Clear all todos
+				</button>
+			</section>
+
 			<ul>
-				{allTodos?.map((todo: { id: string; title: string; completed: boolean }) => (
-					<li key={todo.id || Date.now()}>
+				{allTodos?.map((todo: { id: string; title: string; completed: boolean; isOnChange?: boolean }) => (
+					<li key={todo.id}>
 						<span>
 							<input
 								type="checkbox"
 								name="completed"
 								id={todo.id}
 								checked={todo.completed}
-								disabled={updatedTodoStatus === 'loading' || deleteTodoStatus === 'loading'}
+								disabled={updatedTodoStatus === 'loading' && todo.isOnChange}
 								onChange={() => updateTodo({ todoId: todo.id, title: todo.title, completed: !todo.completed })}
 							/>
 							<p>{todo.title}</p>
 						</span>
 						<button
 							type="button"
-							disabled={updatedTodoStatus === 'loading' || deleteTodoStatus === 'loading'}
 							onClick={() => deleteTodo(todo.id)}>
 							Delete
 						</button>

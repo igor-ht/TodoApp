@@ -1,5 +1,5 @@
 import express from 'express';
-import { createTodo, deleteTodo, handleGetAllTodos, updateTodo } from './todoRouterApi';
+import { clearAllTodos, createTodo, deleteTodo, handleGetAllTodos, updateTodo } from './todoRouterApi';
 
 const todoRouter = express.Router({ mergeParams: true, caseSensitive: true });
 
@@ -10,5 +10,7 @@ todoRouter.post('/createTodo', createTodo);
 todoRouter.put('/updateTodo', updateTodo);
 
 todoRouter.delete('/deleteTodo', deleteTodo);
+
+todoRouter.delete('/clearAllTodos', clearAllTodos);
 
 export default todoRouter;
