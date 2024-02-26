@@ -43,20 +43,18 @@ export default function AddTodo() {
 	};
 
 	return (
-		<section>
-			<form onSubmit={addTodo}>
-				<input
-					type="text"
-					id="todo"
-					value={todo}
-					onChange={(e) => setTodo(e.target.value)}
-				/>
-				<button
-					type="submit"
-					disabled={addTodoStatus === 'loading' || !todo}>
-					Add new todo
-				</button>
-			</form>
-		</section>
+		<form onSubmit={addTodo}>
+			<input
+				type="text"
+				id="todo"
+				value={todo}
+				onChange={(e) => setTodo(e.target.value)}
+			/>
+			<button
+				type="submit"
+				disabled={addTodoStatus === 'loading' || !todo}>
+				Add new todo
+			</button>
+		</form>
 	);
 }

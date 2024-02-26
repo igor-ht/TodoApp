@@ -51,7 +51,7 @@ export default function Todos() {
 		},
 	});
 
-	const { mutate: deleteTodo } = useMutation({
+	const { mutate: deleteTodo, status: deleteTodoStatus } = useMutation({
 		mutationKey: ['deleteTodo'],
 		retry: 3,
 		mutationFn: async (deletedTodo: string) => {
@@ -74,7 +74,7 @@ export default function Todos() {
 		},
 	});
 
-	const { mutate: clearAllTodos } = useMutation({
+	const { mutate: clearAllTodos, status: clearAllTodosStatus } = useMutation({
 		mutationKey: ['clearAllTodos'],
 		retry: 3,
 		mutationFn: async () => {
@@ -83,6 +83,7 @@ export default function Todos() {
 		},
 		onMutate: () => {
 			queryClient.cancelQueries(['todos']);
+			queryClient.setQueryData(['todos'], []);
 			return { todos: [] };
 		},
 		onError: (context: any) => {
@@ -106,9 +107,11 @@ export default function Todos() {
 		);
 
 	return (
-		<div>
+		<>
 			<section>
-				<span>{updatedTodoStatus === 'loading' && <Loading />}</span>
+				<span>
+					{(updatedTodoStatus === 'loading' || deleteTodoStatus === 'loading' || clearAllTodosStatus === 'loading') && <Loading />}
+				</span>
 				<button
 					type="button"
 					disabled={allTodos?.length === 0}
@@ -117,28 +120,30 @@ export default function Todos() {
 				</button>
 			</section>
 
-			<ul>
-				{allTodos?.map((todo: { id: string; title: string; completed: boolean; isOnChange?: boolean }) => (
-					<li key={todo.id}>
-						<span>
-							<input
-								type="checkbox"
-								name="completed"
-								id={todo.id}
-								checked={todo.completed}
-								disabled={updatedTodoStatus === 'loading' && todo.isOnChange}
-								onChange={() => updateTodo({ todoId: todo.id, title: todo.title, completed: !todo.completed })}
-							/>
-							<p>{todo.title}</p>
-						</span>
-						<button
-							type="button"
-							onClick={() => deleteTodo(todo.id)}>
-							Delete
-						</button>
-					</li>
-				))}
-			</ul>
-		</div>
+			<div>
+				<ul>
+					{allTodos?.map((todo: { id: string; title: string; completed: boolean; isOnChange?: boolean }) => (
+						<li key={todo.id}>
+							<span>
+								<input
+									type="checkbox"
+									name="completed"
+									id={todo.id}
+									checked={todo.completed}
+									disabled={updatedTodoStatus === 'loading' && todo.isOnChange}
+									onChange={() => updateTodo({ todoId: todo.id, title: todo.title, completed: !todo.completed })}
+								/>
+								<p>{todo.title}</p>
+							</span>
+							<button
+								type="button"
+								onClick={() => deleteTodo(todo.id)}>
+								Delete
+							</button>
+						</li>
+					))}
+				</ul>
+			</div>
+		</>
 	);
 }
